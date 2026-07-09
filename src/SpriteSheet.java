@@ -26,4 +26,29 @@ public class SpriteSheet {
         }
         return frames;
     }
+
+    // Ambil beberapa baris SEKALIGUS dari sprite sheet, dibaca row-major:
+    // baris 1 kolom 1, baris 1 kolom 2, ..., baris 2 kolom 1, baris 2 kolom 2, dst.
+    // Dipakai buat sheet berbentuk persegi (misal ghost 64x64 = 2x2) yang
+    // animasinya nyambung lintas baris, bukan cuma 1 baris doang kayak cutRow().
+    public static BufferedImage[] cutGrid(BufferedImage sheet, int frameWidth, int frameHeight,
+                                           int rowCount, int columnCount) {
+        BufferedImage[] frames = new BufferedImage[rowCount * columnCount];
+        int i = 0;
+        for (int row = 0; row < rowCount; row++) {
+            for (int col = 0; col < columnCount; col++) {
+                int x = col * frameWidth;
+                int y = row * frameHeight;
+                if (x + frameWidth > sheet.getWidth() || y + frameHeight > sheet.getHeight()) {
+                    int safeW = Math.min(frameWidth, sheet.getWidth() - x);
+                    int safeH = Math.min(frameHeight, sheet.getHeight() - y);
+                    frames[i] = sheet.getSubimage(x, y, safeW, safeH);
+                } else {
+                    frames[i] = sheet.getSubimage(x, y, frameWidth, frameHeight);
+                }
+                i++;
+            }
+        }
+        return frames;
+    }
 }

@@ -11,7 +11,7 @@ public class GameImages {
     public BufferedImage wallImage;
 
     // Tiap file ghost: 128x32 (4 kotak 32x32 berjejer ke samping)
-    public BufferedImage blueGhostSheet;
+    public BufferedImage yellowGhostSheet;
     public BufferedImage orangeGhostSheet;
     public BufferedImage pinkGhostSheet;
     public BufferedImage redGhostSheet;
@@ -29,11 +29,11 @@ public class GameImages {
 
             // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
             // Jadi pakai sheet yellowG.png agar game tetap jalan tanpa ubah asset.
-            blueGhostSheet = readRequiredImage(resourceClass, "assets/ghost/yellowG.png");
+            yellowGhostSheet = readRequiredImage(resourceClass, "assets/ghost/yellowG_ver2.png");
 
-            orangeGhostSheet = readRequiredImage(resourceClass, "assets/ghost/orangeG.png");
-            pinkGhostSheet = readRequiredImage(resourceClass, "assets/ghost/pinkG.png");
-            redGhostSheet = readRequiredImage(resourceClass, "assets/ghost/redG.png");
+            orangeGhostSheet = readRequiredImage(resourceClass, "assets/ghost/orangeG_ver2.png");
+            pinkGhostSheet = readRequiredImage(resourceClass, "assets/ghost/pinkG_ver2.png");
+            redGhostSheet = readRequiredImage(resourceClass, "assets/ghost/redG_ver2.png");
 
 
 

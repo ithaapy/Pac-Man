@@ -36,8 +36,9 @@ public class GameMap {
     public static final int ROW_COUNT = TILE_MAP.length;
     public static final int COLUMN_COUNT = TILE_MAP[0].length();
 
-    // Sprite sheet ghost cuma punya 1 baris, 4 kolom (128x32)
-    private static final int GHOST_FRAME_COLUMNS = 4;
+    // Sprite sheet ghost sekarang 64x64: 2 baris x 2 kolom (32x32 tiap kotak)
+    private static final int GHOST_FRAME_ROWS = 2;
+    private static final int GHOST_FRAME_COLUMNS = 2;
     // Sprite sheet pacman punya 4 kolom di tiap barisnya (128x96),
     // tapi buat sekarang baru baris pertama (row 0) yang dipakai
     private static final int PLAYER_FRAME_COLUMNS = 4;
@@ -72,7 +73,7 @@ public class GameMap {
                 if (tile == 'X') {
                     walls.add(new Wall(images.wallImage, x, y, tileSize, tileSize));
                 } else if (tile == 'b') {
-                    ghosts.add(new Ghost(cutGhostFrames(images.blueGhostSheet), x, y, tileSize, tileSize));
+                    ghosts.add(new Ghost(cutGhostFrames(images.yellowGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'o') {
                     ghosts.add(new Ghost(cutGhostFrames(images.orangeGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'p') {
@@ -94,7 +95,7 @@ public class GameMap {
     }
 
     private BufferedImage[] cutGhostFrames(BufferedImage sheet) {
-        return SpriteSheet.cutRow(sheet, tileSize, tileSize, ANIMATION_ROW, GHOST_FRAME_COLUMNS);
+        return SpriteSheet.cutGrid(sheet, tileSize, tileSize, GHOST_FRAME_ROWS, GHOST_FRAME_COLUMNS);
     }
 
     private BufferedImage[] cutPlayerFrames(BufferedImage sheet) {
