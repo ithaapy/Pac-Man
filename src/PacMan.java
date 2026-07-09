@@ -131,16 +131,16 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
 
         //load images
-        wallImage = new ImageIcon(getClass().getResource("assets/wall.png")).getImage();
-        blueGhostImage = new ImageIcon(getClass().getResource("assets/blueGhost.png")).getImage();
-        orangeGhostImage = new ImageIcon(getClass().getResource("assets/orangeGhost.png")).getImage();
-        pinkGhostImage = new ImageIcon(getClass().getResource("assets/pinkGhost.png")).getImage();
-        redGhostImage = new ImageIcon(getClass().getResource("assets/redGhost.png")).getImage();
+        wallImage = new ImageIcon(getClass().getResource("assets/tile/wall.png")).getImage();
+        blueGhostImage = new ImageIcon(getClass().getResource("assets/ghost/blueGhost.png")).getImage();
+        orangeGhostImage = new ImageIcon(getClass().getResource("assets/ghost/orangeGhost.png")).getImage();
+        pinkGhostImage = new ImageIcon(getClass().getResource("assets/ghost/pinkGhost.png")).getImage();
+        redGhostImage = new ImageIcon(getClass().getResource("assets/ghost/redGhost.png")).getImage();
 
-        pacmanUpImage = new ImageIcon(getClass().getResource("assets/pacmanUp.png")).getImage();
-        pacmanDownImage = new ImageIcon(getClass().getResource("assets/pacmanDown.png")).getImage();
-        pacmanLeftImage = new ImageIcon(getClass().getResource("assets/pacmanLeft.png")).getImage();
-        pacmanRightImage = new ImageIcon(getClass().getResource("assets/pacmanRight.png")).getImage();
+        pacmanUpImage = new ImageIcon(getClass().getResource("assets/player/pacmanUp.png")).getImage();
+        pacmanDownImage = new ImageIcon(getClass().getResource("assets/player/pacmanDown.png")).getImage();
+        pacmanLeftImage = new ImageIcon(getClass().getResource("assets/player/pacmanLeft.png")).getImage();
+        pacmanRightImage = new ImageIcon(getClass().getResource("assets/player/pacmanRight.png")).getImage();
 
         loadMap();
         for (Block ghost : ghosts) {
