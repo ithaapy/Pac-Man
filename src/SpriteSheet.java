@@ -14,7 +14,15 @@ public class SpriteSheet {
         for (int col = 0; col < columnCount; col++) {
             int x = col * frameWidth;
             int y = row * frameHeight;
-            frames[col] = sheet.getSubimage(x, y, frameWidth, frameHeight);
+            // Safety check: pastikan request subimage masih di dalam ukuran sheet.
+            if (x + frameWidth > sheet.getWidth() || y + frameHeight > sheet.getHeight()) {
+                // fallback: pakai area yang available (crop sampai batas)
+                int safeW = Math.min(frameWidth, sheet.getWidth() - x);
+                int safeH = Math.min(frameHeight, sheet.getHeight() - y);
+                frames[col] = sheet.getSubimage(x, y, safeW, safeH);
+            } else {
+                frames[col] = sheet.getSubimage(x, y, frameWidth, frameHeight);
+            }
         }
         return frames;
     }

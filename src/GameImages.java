@@ -25,20 +25,49 @@ public class GameImages {
 
     public GameImages(Class<?> resourceClass) {
         try {
-            wallImage = ImageIO.read(resourceClass.getResource("assets/tile/wall.png"));
+            wallImage = readRequiredImage(resourceClass, "assets/tile/wall.png");
 
-            blueGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/blueGhost.png"));
-            orangeGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/orangeGhost.png"));
-            pinkGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/pinkGhost.png"));
-            redGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/redGhost.png"));
+            // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
+            // Jadi pakai sheet yellowG.png agar game tetap jalan tanpa ubah asset.
+            blueGhostSheet = readRequiredImage(resourceClass, "assets/ghost/yellowG.png");
 
-            // Sesuaikan nama file ini kalau nama file punya kamu beda ya!
-            pacmanUpSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_up.png"));
-            pacmanDownSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_down.png"));
-            pacmanLeftSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_left.png"));
-            pacmanRightSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_right.png"));
+            orangeGhostSheet = readRequiredImage(resourceClass, "assets/ghost/orangeG.png");
+            pinkGhostSheet = readRequiredImage(resourceClass, "assets/ghost/pinkG.png");
+            redGhostSheet = readRequiredImage(resourceClass, "assets/ghost/redG.png");
+
+
+
+            // Nama file pacman juga berbeda (punya versi pacmanUp/pacmanDown, dll).
+            pacmanUpSheet = readRequiredImage(resourceClass, "assets/player/PacMan_up.png");
+            pacmanDownSheet = readRequiredImage(resourceClass, "assets/player/PacMan_down.png");
+            pacmanLeftSheet = readRequiredImage(resourceClass, "assets/player/PacMan_left.png");
+            pacmanRightSheet = readRequiredImage(resourceClass, "assets/player/PacMan_right.png");
         } catch (IOException e) {
             throw new RuntimeException("Gagal load gambar asset: " + e.getMessage(), e);
         }
     }
+
+    private static BufferedImage readRequiredImage(Class<?> resourceClass, String path) throws IOException {
+        java.net.URL url = resourceClass.getResource(path);
+        if (url == null) {
+            throw new IllegalArgumentException(
+                    "Asset not found on classpath: " + path + " (resourceClass=" + resourceClass.getName() + ")");
+        }
+        return ImageIO.read(url);
+    }
+
+    private static BufferedImage readFirstExisting(Class<?> resourceClass, String[] paths) throws IOException {
+        IllegalArgumentException lastError = null;
+        for (String path : paths) {
+            try {
+                return readRequiredImage(resourceClass, path);
+            } catch (IllegalArgumentException ex) {
+                lastError = ex;
+            }
+        }
+        // If none exist, throw the last meaningful exception
+        if (lastError != null) throw lastError;
+        throw new IllegalArgumentException("No asset path provided");
+    }
 }
+
