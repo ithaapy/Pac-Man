@@ -1,8 +1,10 @@
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 
 /**
  * GameMap = nyimpen layout papan permainan (TILE_MAP) dan tugas "membaca"
  * layout itu jadi objek-objek Wall, Food, Ghost, dan Player yang sebenarnya.
+ * Sprite sheet ghost/pacman dipotong jadi frame animasi di sini.
  */
 public class GameMap {
     // X = tembok, O = celah kosong di sisi kiri/kanan, P = pacman, spasi = makanan
@@ -34,6 +36,13 @@ public class GameMap {
     public static final int ROW_COUNT = TILE_MAP.length;
     public static final int COLUMN_COUNT = TILE_MAP[0].length();
 
+    // Sprite sheet ghost cuma punya 1 baris, 4 kolom (128x32)
+    private static final int GHOST_FRAME_COLUMNS = 4;
+    // Sprite sheet pacman punya 4 kolom di tiap barisnya (128x96),
+    // tapi buat sekarang baru baris pertama (row 0) yang dipakai
+    private static final int PLAYER_FRAME_COLUMNS = 4;
+    private static final int ANIMATION_ROW = 0;
+
     public HashSet<Block> walls = new HashSet<>();
     public HashSet<Food> foods = new HashSet<>();
     public HashSet<Ghost> ghosts = new HashSet<>();
@@ -63,21 +72,32 @@ public class GameMap {
                 if (tile == 'X') {
                     walls.add(new Wall(images.wallImage, x, y, tileSize, tileSize));
                 } else if (tile == 'b') {
-                    ghosts.add(new Ghost(images.blueGhostImage, x, y, tileSize, tileSize));
+                    ghosts.add(new Ghost(cutGhostFrames(images.blueGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'o') {
-                    ghosts.add(new Ghost(images.orangeGhostImage, x, y, tileSize, tileSize));
+                    ghosts.add(new Ghost(cutGhostFrames(images.orangeGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'p') {
-                    ghosts.add(new Ghost(images.pinkGhostImage, x, y, tileSize, tileSize));
+                    ghosts.add(new Ghost(cutGhostFrames(images.pinkGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'r') {
-                    ghosts.add(new Ghost(images.redGhostImage, x, y, tileSize, tileSize));
+                    ghosts.add(new Ghost(cutGhostFrames(images.redGhostSheet), x, y, tileSize, tileSize));
                 } else if (tile == 'P') {
-                    player = new Player(images.pacmanUpImage, images.pacmanDownImage,
-                            images.pacmanLeftImage, images.pacmanRightImage,
+                    BufferedImage[] upFrames = cutPlayerFrames(images.pacmanUpSheet);
+                    BufferedImage[] downFrames = cutPlayerFrames(images.pacmanDownSheet);
+                    BufferedImage[] leftFrames = cutPlayerFrames(images.pacmanLeftSheet);
+                    BufferedImage[] rightFrames = cutPlayerFrames(images.pacmanRightSheet);
+                    player = new Player(upFrames, downFrames, leftFrames, rightFrames,
                             x, y, tileSize, tileSize);
                 } else if (tile == ' ') {
                     foods.add(new Food(x + 14, y + 14, 4, 4));
                 }
             }
         }
+    }
+
+    private BufferedImage[] cutGhostFrames(BufferedImage sheet) {
+        return SpriteSheet.cutRow(sheet, tileSize, tileSize, ANIMATION_ROW, GHOST_FRAME_COLUMNS);
+    }
+
+    private BufferedImage[] cutPlayerFrames(BufferedImage sheet) {
+        return SpriteSheet.cutRow(sheet, tileSize, tileSize, ANIMATION_ROW, PLAYER_FRAME_COLUMNS);
     }
 }

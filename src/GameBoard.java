@@ -78,9 +78,11 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-    // Dipanggil tiap frame oleh Timer: gerakin semua objek + cek semua tabrakan
+    // Dipanggil tiap frame oleh Timer: jalanin animasi, gerakin semua objek, cek semua tabrakan
     private void move() {
         Player pacman = gameMap.player;
+        pacman.animateTick(); // jalanin animasi kunyah pacman tiap frame
+
         pacman.x += pacman.velocityX;
         pacman.y += pacman.velocityY;
 
@@ -93,7 +95,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             }
         }
 
-        // Cek pacman nabrak hantu, sekalian gerakin tiap hantu
+        // Cek pacman nabrak hantu, sekalian gerakin (+ animasikan) tiap hantu
         for (Ghost ghost : gameMap.ghosts) {
             if (Block.collision(ghost, pacman)) {
                 lives -= 1;
@@ -103,7 +105,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
                 }
                 resetPositions();
             }
-            ghost.move(tileSize, boardWidth, gameMap.walls);
+            ghost.move(tileSize, boardWidth, gameMap.walls); // animasi hantu dijalankan di dalam move()
         }
 
         // Cek pacman makan makanan

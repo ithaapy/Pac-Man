@@ -1,17 +1,21 @@
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Random;
 
 /**
- * Ghost = hantu. Beda dari Wall/Food, hantu punya "kelakuan sendiri":
- * gerak sendiri secara random dan bisa nabrak pacman.
+ * Ghost = hantu. Punya animasi jalan (looping 4 frame dari sprite sheet),
+ * tapi gambarnya gak berubah sesuai arah (cuma 1 sisi/tampilan default).
  */
 public class Ghost extends Block {
     private static final Random random = new Random();
     private static final char[] DIRECTIONS = {'U', 'D', 'L', 'R'};
+    private static final int TICKS_PER_FRAME = 8; // makin kecil = animasi makin cepat
 
-    public Ghost(Image image, int x, int y, int width, int height) {
-        super(image, x, y, width, height);
+    private SpriteAnimation animation;
+
+    public Ghost(BufferedImage[] frames, int x, int y, int width, int height) {
+        super(frames[0], x, y, width, height);
+        this.animation = new SpriteAnimation(frames, TICKS_PER_FRAME);
     }
 
     // Pilih 1 arah random, lalu langsung update posisi sesuai arah itu
@@ -20,9 +24,12 @@ public class Ghost extends Block {
         updateDirection(newDirection, tileSize, walls);
     }
 
-    // Dipanggil tiap frame: jalan sesuai velocity saat ini.
+    // Dipanggil tiap frame game: jalanin animasi + gerak sesuai velocity.
     // Kalau nabrak tembok / keluar batas papan, balikin posisi & ganti arah random.
     public void move(int tileSize, int boardWidth, HashSet<Block> walls) {
+        animation.tick();
+        this.image = animation.getCurrentFrame();
+
         // Aturan khusus: di baris pintu kandang hantu, hantu wajib gerak ke atas dulu
         if (this.y == tileSize * 9 && this.direction != 'U' && this.direction != 'D') {
             updateDirection('U', tileSize, walls);
@@ -39,5 +46,11 @@ public class Ghost extends Block {
                 break;
             }
         }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        animation.reset();
     }
 }

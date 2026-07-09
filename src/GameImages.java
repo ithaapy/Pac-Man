@@ -1,34 +1,44 @@
-import java.awt.Image;
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
- * GameImages = tempat nyimpen & load semua gambar (tembok, hantu, pacman)
- * sekali aja di awal. Tujuannya biar GameBoard gak penuh kode loading gambar.
+ * GameImages = tempat load semua sprite sheet & gambar statis sekali di awal.
+ * Ghost & Player sekarang berupa SPRITE SHEET (banyak frame animasi),
+ * bukan lagi 1 gambar statis. Pemotongan jadi frame dilakukan di GameMap.
  */
 public class GameImages {
-    public Image wallImage;
-    public Image blueGhostImage;
-    public Image orangeGhostImage;
-    public Image pinkGhostImage;
-    public Image redGhostImage;
+    public BufferedImage wallImage;
 
-    public Image pacmanUpImage;
-    public Image pacmanDownImage;
-    public Image pacmanLeftImage;
-    public Image pacmanRightImage;
+    // Tiap file ghost: 128x32 (4 kotak 32x32 berjejer ke samping)
+    public BufferedImage blueGhostSheet;
+    public BufferedImage orangeGhostSheet;
+    public BufferedImage pinkGhostSheet;
+    public BufferedImage redGhostSheet;
 
-    // resourceClass dikirim dari GameBoard (biasanya getClass()) supaya
-    // path assets tetap relatif ke lokasi file class itu, sama seperti kode aslinya
+    // Tiap file pacman: 128x96 (4 kolom x 3 baris @32x32).
+    // Baris pertama (row 0) yang dipakai sekarang buat animasi jalan.
+    public BufferedImage pacmanUpSheet;
+    public BufferedImage pacmanDownSheet;
+    public BufferedImage pacmanLeftSheet;
+    public BufferedImage pacmanRightSheet;
+
     public GameImages(Class<?> resourceClass) {
-        wallImage = new ImageIcon(resourceClass.getResource("assets/tile/wall.png")).getImage();
-        blueGhostImage = new ImageIcon(resourceClass.getResource("assets/ghost/blueGhost.png")).getImage();
-        orangeGhostImage = new ImageIcon(resourceClass.getResource("assets/ghost/orangeGhost.png")).getImage();
-        pinkGhostImage = new ImageIcon(resourceClass.getResource("assets/ghost/pinkGhost.png")).getImage();
-        redGhostImage = new ImageIcon(resourceClass.getResource("assets/ghost/redGhost.png")).getImage();
+        try {
+            wallImage = ImageIO.read(resourceClass.getResource("assets/tile/wall.png"));
 
-        pacmanUpImage = new ImageIcon(resourceClass.getResource("assets/player/pacmanUp.png")).getImage();
-        pacmanDownImage = new ImageIcon(resourceClass.getResource("assets/player/pacmanDown.png")).getImage();
-        pacmanLeftImage = new ImageIcon(resourceClass.getResource("assets/player/pacmanLeft.png")).getImage();
-        pacmanRightImage = new ImageIcon(resourceClass.getResource("assets/player/pacmanRight.png")).getImage();
+            blueGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/blueGhost.png"));
+            orangeGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/orangeGhost.png"));
+            pinkGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/pinkGhost.png"));
+            redGhostSheet = ImageIO.read(resourceClass.getResource("assets/ghost/redGhost.png"));
+
+            // Sesuaikan nama file ini kalau nama file punya kamu beda ya!
+            pacmanUpSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_up.png"));
+            pacmanDownSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_down.png"));
+            pacmanLeftSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_left.png"));
+            pacmanRightSheet = ImageIO.read(resourceClass.getResource("assets/player/PacMan_right.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("Gagal load gambar asset: " + e.getMessage(), e);
+        }
     }
 }
