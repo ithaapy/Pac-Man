@@ -44,6 +44,10 @@ public class GameMap {
     private static final int PLAYER_FRAME_COLUMNS = 4;
     private static final int ANIMATION_ROW = 0;
 
+    // Ukuran gambar koin (titik makanan), dibuat sedikit lebih besar dari
+    // fillRect lama (4x4) biar gambarnya kelihatan jelas, tetap dicenterin di tile
+    private static final int FOOD_SIZE = 10;
+
     public HashSet<Block> walls = new HashSet<>();
     public HashSet<Food> foods = new HashSet<>();
     public HashSet<Ghost> ghosts = new HashSet<>();
@@ -88,7 +92,8 @@ public class GameMap {
                     player = new Player(upFrames, downFrames, leftFrames, rightFrames,
                             x, y, tileSize, tileSize);
                 } else if (tile == ' ') {
-                    foods.add(new Food(x + 14, y + 14, 4, 4));
+                    int offset = (tileSize - FOOD_SIZE) / 2;
+                    foods.add(new Food(images.smallCoinImage, x + offset, y + offset, FOOD_SIZE, FOOD_SIZE));
                 }
             }
         }

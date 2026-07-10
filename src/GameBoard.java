@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,25 +14,42 @@ import javax.swing.Timer;
  * GameBoard = "otak" dari game ini. Isinya cuma logic jalannya permainan:
  * game loop, gambar ke layar, cek tabrakan, dan baca input keyboard.
  * Data map & pembuatan objek sudah dipindah ke GameMap.
+ *
+ * Layout layar sekarang ada 3 lapis:
+ * 1. Border ungu di paling luar
+ * 2. Header (Your Score / High Score) di bagian atas area gelap
+ * 3. Area maze (game sebenarnya) di bawah header
  */
 public class GameBoard extends JPanel implements ActionListener, KeyListener {
+    private static final Color BORDER_COLOR = new Color(70, 58, 115);
+    private static final Color BACKGROUND_COLOR = new Color(42, 40, 58);
+    private static final int BORDER = 16;
+    private static final int HEADER_HEIGHT = 70;
+
     private int tileSize = 32;
     private int boardWidth = GameMap.COLUMN_COUNT * tileSize;
     private int boardHeight = GameMap.ROW_COUNT * tileSize;
+
+    // Ukuran total panel = area maze + border ungu + header skor
+    private int totalWidth = boardWidth + BORDER * 2;
+    private int totalHeight = boardHeight + HEADER_HEIGHT + BORDER * 2;
 
     private GameImages images;
     private GameMap gameMap;
 
     private Timer gameLoop;
     private int score = 0;
+    private int highScore;
     private int lives = 3;
     private boolean gameOver = false;
 
     public GameBoard() {
-        setPreferredSize(new Dimension(boardWidth, boardHeight));
-        setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(totalWidth, totalHeight));
+        setBackground(BORDER_COLOR);
         addKeyListener(this);
         setFocusable(true);
+
+        highScore = HighScoreStorage.load();
 
         images = new GameImages(getClass());
         gameMap = new GameMap(images, tileSize);
@@ -54,6 +72,60 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     }
 
     private void draw(Graphics g) {
+        // Lapis 1: seluruh panel udah keisi warna ungu lewat setBackground()
+
+        // Lapis 2: kotak gelap tempat header + maze berada
+        g.setColor(BACKGROUND_COLOR);
+        g.fillRect(BORDER, BORDER, totalWidth - BORDER * 2, totalHeight - BORDER * 2);
+
+        drawHeader(g);
+
+        // Lapis 3: maze digambar lewat "sub-graphics" yang digeser & di-clip
+        // ke area mazenya sendiri, jadi kode gambar tembok/food/dst gak perlu
+        // tau-menau soal border atau header di luar sana.
+        Graphics mazeGraphics = g.create(BORDER, BORDER + HEADER_HEIGHT, boardWidth, boardHeight);
+        drawMaze(mazeGraphics);
+        mazeGraphics.dispose();
+    }
+
+    private void drawHeader(Graphics g) {
+        Font labelFont = images.pixelFont.deriveFont(Font.PLAIN, 14f);
+        Font valueFont = images.pixelFont.deriveFont(Font.PLAIN, 20f);
+        Font titleFont = images.pixelFont.deriveFont(Font.PLAIN, 28f);
+
+        g.setColor(Color.WHITE);
+
+        // "Your Score" + nilainya, rata kiri
+        g.setFont(labelFont);
+        g.drawString("Your Score", BORDER + 10, BORDER + 24);
+        g.setFont(valueFont);
+        g.drawString(String.valueOf(score), BORDER + 10, BORDER + 50);
+
+        // "High Score" + nilainya, rata kanan
+        g.setFont(labelFont);
+        FontMetrics labelMetrics = g.getFontMetrics();
+        String highScoreLabel = "High Score";
+        int labelWidth = labelMetrics.stringWidth(highScoreLabel);
+        g.drawString(highScoreLabel, totalWidth - BORDER - 10 - labelWidth, BORDER + 24);
+
+        g.setFont(valueFont);
+        FontMetrics valueMetrics = g.getFontMetrics();
+        String highScoreValue = String.valueOf(highScore);
+        int valueWidth = valueMetrics.stringWidth(highScoreValue);
+        g.drawString(highScoreValue, totalWidth - BORDER - 10 - valueWidth, BORDER + 50);
+
+        // Judul game, ditaruh di tengah, di antara Your Score dan High Score
+        g.setFont(titleFont);
+        FontMetrics titleMetrics = g.getFontMetrics();
+        String title = "Pac-Man";
+        int titleWidth = titleMetrics.stringWidth(title);
+        int titleX = (totalWidth - titleWidth) / 2;
+        int titleY = BORDER + (HEADER_HEIGHT + titleMetrics.getAscent()) / 2 - 4;
+        g.drawString(title, titleX, titleY);
+    }
+
+    // g di sini koordinatnya udah relatif ke pojok kiri-atas area maze (0,0)
+    private void drawMaze(Graphics g) {
         Player pacman = gameMap.player;
         g.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height, null);
 
@@ -65,16 +137,21 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
         }
 
-        g.setColor(Color.WHITE);
         for (Food food : gameMap.foods) {
-            g.fillRect(food.x, food.y, food.width, food.height);
+            g.drawImage(food.image, food.x, food.y, food.width, food.height, null);
         }
 
-        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        // Sisa nyawa, pojok kiri bawah area maze
+        g.setColor(Color.WHITE);
+        g.setFont(images.pixelFont.deriveFont(Font.PLAIN, 16f));
+        g.drawString("x" + lives, 6, boardHeight - 10);
+
         if (gameOver) {
-            g.drawString("Game Over: " + score, tileSize / 2, tileSize / 2);
-        } else {
-            g.drawString("x" + lives + " Score: " + score, tileSize / 2, tileSize / 2);
+            g.setFont(images.pixelFont.deriveFont(Font.PLAIN, 26f));
+            String text = "GAME OVER";
+            FontMetrics metrics = g.getFontMetrics();
+            int textWidth = metrics.stringWidth(text);
+            g.drawString(text, (boardWidth - textWidth) / 2, boardHeight / 2);
         }
     }
 
@@ -95,6 +172,10 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             }
         }
 
+        // Efek tunnel: kalau pacman jalan sampai keluar sisi kiri/kanan papan
+        // (cuma bisa kejadian di baris 'O', karena baris lain ketutup tembok)
+        pacman.wrapAround(boardWidth);
+
         // Cek pacman nabrak hantu, sekalian gerakin (+ animasikan) tiap hantu
         for (Ghost ghost : gameMap.ghosts) {
             if (Block.collision(ghost, pacman)) {
@@ -114,6 +195,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             if (Block.collision(pacman, food)) {
                 foodEaten = food;
                 score += 10;
+                updateHighScoreIfNeeded();
             }
         }
         gameMap.foods.remove(foodEaten);
@@ -122,6 +204,14 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         if (gameMap.foods.isEmpty()) {
             gameMap.load();
             resetPositions();
+        }
+    }
+
+    // Kalau score sekarang udah lewatin high score, update + simpen ke file
+    private void updateHighScoreIfNeeded() {
+        if (score > highScore) {
+            highScore = score;
+            HighScoreStorage.save(highScore);
         }
     }
 

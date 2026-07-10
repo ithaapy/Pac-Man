@@ -1,10 +1,11 @@
+import java.awt.Image;
+
 /**
- * Food = titik makanan kecil. Sama kayak Wall, cuma diam di tempat.
- * Gambarnya di-null karena digambar manual pakai fillRect() di GameBoard,
- * bukan pakai Image.
+ * Food = titik makanan kecil, digambar pakai gambar koin (smallCoin.png)
+ * yang dioper dari GameMap, bukan lagi fillRect() manual.
  */
 public class Food extends Block {
-    public Food(int x, int y, int width, int height) {
-        super(null, x, y, width, height);
+    public Food(Image image, int x, int y, int width, int height) {
+        super(image, x, y, width, height);
     }
 }

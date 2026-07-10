@@ -55,6 +55,16 @@ public class Player extends Block {
         this.image = currentAnimation.getCurrentFrame();
     }
 
+    // Efek tunnel: kalau pacman jalan sampai bener-bener hilang di satu sisi papan
+    // (lewat celah 'O' yang emang gak ada temboknya), munculin lagi dari sisi seberang.
+    public void wrapAround(int boardWidth) {
+        if (this.x + this.width <= 0) {
+            this.x = boardWidth; // hilang di kiri -> muncul dari kanan
+        } else if (this.x >= boardWidth) {
+            this.x = -this.width; // hilang di kanan -> muncul dari kiri
+        }
+    }
+
     @Override
     public void reset() {
         super.reset();

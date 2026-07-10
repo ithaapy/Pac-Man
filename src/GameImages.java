@@ -1,5 +1,9 @@
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 /**
@@ -9,6 +13,12 @@ import javax.imageio.ImageIO;
  */
 public class GameImages {
     public BufferedImage wallImage;
+
+    // Titik makanan kecil, sekarang pakai gambar koin, bukan fillRect() lagi
+    public BufferedImage smallCoinImage;
+
+    // Font pixel custom buat semua teks di game (score, judul, nyawa, dst)
+    public Font pixelFont;
 
     // Tiap file ghost: 128x32 (4 kotak 32x32 berjejer ke samping)
     public BufferedImage yellowGhostSheet;
@@ -26,6 +36,8 @@ public class GameImages {
     public GameImages(Class<?> resourceClass) {
         try {
             wallImage = readRequiredImage(resourceClass, "assets/tile/wall.png");
+            smallCoinImage = readRequiredImage(resourceClass, "assets/item/smallCoin.png");
+            pixelFont = loadPixelFont(resourceClass, "assets/fonts/DePixelHalbfett.ttf");
 
             // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
             // Jadi pakai sheet yellowG.png agar game tetap jalan tanpa ubah asset.
@@ -43,7 +55,23 @@ public class GameImages {
             pacmanLeftSheet = readRequiredImage(resourceClass, "assets/player/PacMan_left.png");
             pacmanRightSheet = readRequiredImage(resourceClass, "assets/player/PacMan_right.png");
         } catch (IOException e) {
-            throw new RuntimeException("Gagal load gambar asset: " + e.getMessage(), e);
+            throw new RuntimeException("Gagal load gambar/font asset: " + e.getMessage(), e);
+        }
+    }
+
+    // Load file font custom (.ttf) dari classpath, lalu daftarkan ke sistem
+    // biar bisa dipakai kayak font biasa lewat deriveFont(style, size).
+    private static Font loadPixelFont(Class<?> resourceClass, String path) throws IOException {
+        try (InputStream is = resourceClass.getResourceAsStream(path)) {
+            if (is == null) {
+                throw new IllegalArgumentException(
+                        "Font not found on classpath: " + path + " (resourceClass=" + resourceClass.getName() + ")");
+            }
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+            return font;
+        } catch (FontFormatException e) {
+            throw new IOException("Format font tidak valid: " + path, e);
         }
     }
 
@@ -70,4 +98,3 @@ public class GameImages {
         throw new IllegalArgumentException("No asset path provided");
     }
 }
-
