@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
  * bukan lagi 1 gambar statis. Pemotongan jadi frame dilakukan di GameMap.
  */
 public class GameImages {
+    public BufferedImage pacIconImage;
+
     public BufferedImage wallImage;
 
     // Titik makanan kecil, sekarang pakai gambar koin, bukan fillRect() lagi
@@ -54,6 +56,8 @@ public class GameImages {
             pacmanDownSheet = readRequiredImage(resourceClass, "assets/player/PacMan_down.png");
             pacmanLeftSheet = readRequiredImage(resourceClass, "assets/player/PacMan_left.png");
             pacmanRightSheet = readRequiredImage(resourceClass, "assets/player/PacMan_right.png");
+
+            
         } catch (IOException e) {
             throw new RuntimeException("Gagal load gambar/font asset: " + e.getMessage(), e);
         }

@@ -30,6 +30,7 @@ public class Block {
 
     // Ganti arah gerak, terapkan ke posisi, lalu cek: kalau nabrak tembok, batalkan lagi
     public void updateDirection(char direction, int tileSize, HashSet<Block> walls) {
+        
         char prevDirection = this.direction;
         this.direction = direction;
         updateVelocity(tileSize);
@@ -72,9 +73,14 @@ public class Block {
 
     // Static: dipakai buat cek tabrakan antar 2 Block mana pun (dari class manapun)
     public static boolean collision(Block a, Block b) {
-        return  a.x < b.x + b.width &&
-                a.x + a.width > b.x &&
-                a.y < b.y + b.height &&
-                a.y + a.height > b.y;
+    int marginA = (a instanceof Player) ? 4 : 0; // Pac-Man hitbox 24x24 di tengah
+    int ax = a.x + marginA;
+    int ay = a.y + marginA;
+    int aw = a.width - marginA * 2;
+    int ah = a.height - marginA * 2;
+    return ax < b.x + b.width &&
+           ax + aw > b.x &&
+           ay < b.y + b.height &&
+           ay + ah > b.y;
     }
 }

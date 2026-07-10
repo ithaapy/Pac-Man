@@ -73,4 +73,37 @@ public class Player extends Block {
         leftAnimation.reset();
         rightAnimation.reset();
     }
+
+private char queuedDirection = 0;
+
+public void queueDirection(char direction) {
+    this.queuedDirection = direction;
+}
+
+public void tryApplyQueuedDirection(int tileSize, HashSet<Block> walls) {
+    if (queuedDirection == 0) return;
+    if (queuedDirection == this.direction) return;
+
+    // Cek apakah sudah cukup sejajar ke grid untuk belok
+    if (canTurn(queuedDirection, tileSize)) {
+        updateDirection(queuedDirection, tileSize, walls);
+        if (this.direction == queuedDirection) {
+            queuedDirection = 0; // belok berhasil
+        }
+    }
+}
+
+private boolean canTurn(char newDirection, int tileSize) {
+    int tolerance = tileSize / 4; // 8px, sama dengan velocity
+
+    if (newDirection == 'U' || newDirection == 'D') {
+        // Mau belok vertikal: x harus dekat tengah kolom
+        int offsetX = x % tileSize;
+        return offsetX <= tolerance || offsetX >= tileSize - tolerance;
+    } else {
+        // Mau belok horizontal: y harus dekat tengah baris
+        int offsetY = y % tileSize;
+        return offsetY <= tolerance || offsetY >= tileSize - tolerance;
+    }
+}
 }

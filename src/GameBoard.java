@@ -158,6 +158,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     // Dipanggil tiap frame oleh Timer: jalanin animasi, gerakin semua objek, cek semua tabrakan
     private void move() {
         Player pacman = gameMap.player;
+        pacman.tryApplyQueuedDirection(tileSize, gameMap.walls);
         pacman.animateTick(); // jalanin animasi kunyah pacman tiap frame
 
         pacman.x += pacman.velocityX;
@@ -238,7 +239,11 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {}
+    public void keyPressed(KeyEvent e) {
+        if (!gameOver) {
+        handleMovementInput(e.getKeyCode());
+        }
+    }
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -250,8 +255,10 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             gameOver = false;
             gameLoop.start();
         }
+        
 
         Player pacman = gameMap.player;
+
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             pacman.updateDirection('U', tileSize, gameMap.walls);
         } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -262,4 +269,26 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             pacman.updateDirection('R', tileSize, gameMap.walls);
         }
     }
+
+    private void handleMovementInput(int keyCode) {
+    Player pacman = gameMap.player;
+    char direction = 0;
+
+    if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) {
+        direction = 'U';
+    } else if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) {
+        direction = 'D';
+    } else if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A) {
+        direction = 'L';
+    } else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D) {
+        direction = 'R';
+    }
+
+    if (direction != 0) {
+        pacman.queueDirection(direction);
+    }
+
+    
+}
+
 }
