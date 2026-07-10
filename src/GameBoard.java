@@ -25,6 +25,10 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     private static final Color BACKGROUND_COLOR = new Color(42, 40, 58);
     private static final int BORDER = 16;
     private static final int HEADER_HEIGHT = 70;
+            
+    private static final int FOOTER_HEIGHT = 50;   // area kosong bawah untuk nyawa
+    private static final int LIFE_ICON_SIZE = 24;    // ukuran ikon pacman kecil
+    private static final int LIFE_ICON_GAP = 8;      // jarak antar ikon
 
     private int tileSize = 32;
     private int boardWidth = GameMap.COLUMN_COUNT * tileSize;
@@ -32,7 +36,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
     // Ukuran total panel = area maze + border ungu + header skor
     private int totalWidth = boardWidth + BORDER * 2;
-    private int totalHeight = boardHeight + HEADER_HEIGHT + BORDER * 2;
+    private int totalHeight = boardHeight + HEADER_HEIGHT + FOOTER_HEIGHT + BORDER * 2;
 
     private GameImages images;
     private GameMap gameMap;
@@ -86,6 +90,27 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         Graphics mazeGraphics = g.create(BORDER, BORDER + HEADER_HEIGHT, boardWidth, boardHeight);
         drawMaze(mazeGraphics);
         mazeGraphics.dispose();
+
+        drawFooter(g);
+    }
+
+    private void drawFooter(Graphics g) {
+    int footerTop = BORDER + HEADER_HEIGHT + boardHeight;
+    int startX = BORDER + 10;  // sejajar padding "Your Score"
+    int iconY = footerTop + (FOOTER_HEIGHT - LIFE_ICON_SIZE) / 2;
+
+        for (int i = 0; i < lives; i++) {
+            int iconX = startX + i * (LIFE_ICON_SIZE + LIFE_ICON_GAP);
+            g.drawImage(
+                images.pacIconImage,
+                iconX,
+                iconY,
+                LIFE_ICON_SIZE,
+                LIFE_ICON_SIZE,
+                null
+            );
+        }
+    
     }
 
     private void drawHeader(Graphics g) {
@@ -141,13 +166,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
             g.drawImage(food.image, food.x, food.y, food.width, food.height, null);
         }
 
-        // Sisa nyawa, pojok kiri bawah area maze
-        g.setColor(Color.WHITE);
-        g.setFont(images.pixelFont.deriveFont(Font.PLAIN, 16f));
-        g.drawString("x" + lives, 6, boardHeight - 10);
-
+        
         if (gameOver) {
-            g.setFont(images.pixelFont.deriveFont(Font.PLAIN, 26f));
+            g.setFont(images.pixelFont.deriveFont(Font.PLAIN, 30f));
             String text = "GAME OVER";
             FontMetrics metrics = g.getFontMetrics();
             int textWidth = metrics.stringWidth(text);

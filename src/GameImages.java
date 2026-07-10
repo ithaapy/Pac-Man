@@ -57,7 +57,9 @@ public class GameImages {
             pacmanLeftSheet = readRequiredImage(resourceClass, "assets/player/PacMan_left.png");
             pacmanRightSheet = readRequiredImage(resourceClass, "assets/player/PacMan_right.png");
 
+            pacIconImage = readRequiredImage(resourceClass, "assets/item/pacIcon.png");
             
+
         } catch (IOException e) {
             throw new RuntimeException("Gagal load gambar/font asset: " + e.getMessage(), e);
         }
