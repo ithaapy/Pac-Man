@@ -37,7 +37,7 @@ public class GameImages {
         try {
             wallImage = readRequiredImage(resourceClass, "assets/tile/wall.png");
             smallCoinImage = readRequiredImage(resourceClass, "assets/item/smallCoin.png");
-            pixelFont = loadPixelFont(resourceClass, "assets/fonts/DePixelHalbfett.ttf");
+            pixelFont = loadPixelFont(resourceClass, "assets/font/DePixelHalbfett.ttf");
 
             // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
             // Jadi pakai sheet yellowG.png agar game tetap jalan tanpa ubah asset.
