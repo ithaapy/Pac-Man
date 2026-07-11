@@ -46,7 +46,7 @@ public class GameMap {
 
     // Ukuran gambar koin (titik makanan), dibuat sedikit lebih besar dari
     // fillRect lama (4x4) biar gambarnya kelihatan jelas, tetap dicenterin di tile
-    private static final int FOOD_SIZE = 10;
+    private static final int FOOD_SIZE = 4;
 
     public HashSet<Block> walls = new HashSet<>();
     public HashSet<Food> foods = new HashSet<>();
@@ -93,7 +93,7 @@ public class GameMap {
                             x, y, tileSize, tileSize);
                 } else if (tile == ' ') {
                     int offset = (tileSize - FOOD_SIZE) / 2;
-                    foods.add(new Food(images.smallCoinImage, x + offset, y + offset, FOOD_SIZE, FOOD_SIZE));
+                    foods.add(new Food(images.powerFoodImage, x + offset, y + offset, FOOD_SIZE, FOOD_SIZE));
                 }
             }
         }

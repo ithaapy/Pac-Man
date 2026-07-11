@@ -154,17 +154,16 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         Player pacman = gameMap.player;
         g.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height, null);
 
-        for (Ghost ghost : gameMap.ghosts) {
-            g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
-        }
-
         for (Block wall : gameMap.walls) {
             g.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height, null);
         }
-
         for (Food food : gameMap.foods) {
             g.drawImage(food.image, food.x, food.y, food.width, food.height, null);
         }
+        for (Ghost ghost : gameMap.ghosts) {
+            g.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height, null);
+        }
+        
 
         
         if (gameOver) {

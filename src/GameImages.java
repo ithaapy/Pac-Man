@@ -17,7 +17,7 @@ public class GameImages {
     public BufferedImage wallImage;
 
     // Titik makanan kecil, sekarang pakai gambar koin, bukan fillRect() lagi
-    public BufferedImage smallCoinImage;
+    public BufferedImage powerFoodImage;
 
     // Font pixel custom buat semua teks di game (score, judul, nyawa, dst)
     public Font pixelFont;
@@ -38,7 +38,7 @@ public class GameImages {
     public GameImages(Class<?> resourceClass) {
         try {
             wallImage = readRequiredImage(resourceClass, "assets/tile/wall.png");
-            smallCoinImage = readRequiredImage(resourceClass, "assets/item/smallCoin.png");
+            powerFoodImage = readRequiredImage(resourceClass, "assets/item/powerFood.png");
             pixelFont = loadPixelFont(resourceClass, "assets/font/DePixelHalbfett.ttf");
 
             // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
