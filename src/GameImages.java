@@ -51,32 +51,32 @@ public class GameImages {
 
     public GameImages(Class<?> resourceClass) {
         try {
-            wallImage = readRequiredImage(resourceClass, "assets/tile/wall.png");
-            powerFoodImage = readRequiredImage(resourceClass, "assets/item/powerFood.png");
-            pixelFont = loadPixelFont(resourceClass, "assets/font/DePixelHalbfett.ttf");
+            wallImage = readRequiredImage(resourceClass, "/assets/tile/wall.png");
+            powerFoodImage = readRequiredImage(resourceClass, "/assets/item/powerFood.png");
+            pixelFont = loadPixelFont(resourceClass, "/assets/font/DePixelHalbfett.ttf");
 
             // Blue ghost sheet file tidak ada di assets/ghost folder kamu.
             // Jadi pakai sheet yellowG.png agar game tetap jalan tanpa ubah asset.
-            yellowGhostSheet = readRequiredImage(resourceClass, "assets/ghost/yellowG_ver2.png");
+            yellowGhostSheet = readRequiredImage(resourceClass, "/assets/ghost/yellowG_ver2.png");
 
-            orangeGhostSheet = readRequiredImage(resourceClass, "assets/ghost/orangeG_ver2.png");
-            pinkGhostSheet = readRequiredImage(resourceClass, "assets/ghost/pinkG_ver2.png");
-            redGhostSheet = readRequiredImage(resourceClass, "assets/ghost/redG_ver2.png");
+            orangeGhostSheet = readRequiredImage(resourceClass, "/assets/ghost/orangeG_ver2.png");
+            pinkGhostSheet = readRequiredImage(resourceClass, "/assets/ghost/pinkG_ver2.png");
+            redGhostSheet = readRequiredImage(resourceClass, "/assets/ghost/redG_ver2.png");
 
 
 
             // Nama file pacman juga berbeda (punya versi pacmanUp/pacmanDown, dll).
-            pacmanUpSheet = readRequiredImage(resourceClass, "assets/player/PacMan_up.png");
-            pacmanDownSheet = readRequiredImage(resourceClass, "assets/player/PacMan_down.png");
-            pacmanLeftSheet = readRequiredImage(resourceClass, "assets/player/PacMan_left.png");
-            pacmanRightSheet = readRequiredImage(resourceClass, "assets/player/PacMan_right.png");
+            pacmanUpSheet = readRequiredImage(resourceClass, "/assets/player/PacMan_up.png");
+            pacmanDownSheet = readRequiredImage(resourceClass, "/assets/player/PacMan_down.png");
+            pacmanLeftSheet = readRequiredImage(resourceClass, "/assets/player/PacMan_left.png");
+            pacmanRightSheet = readRequiredImage(resourceClass, "/assets/player/PacMan_right.png");
 
-            pacIconImage = readRequiredImage(resourceClass, "assets/item/pacIcon.png");
+            pacIconImage = readRequiredImage(resourceClass, "/assets/item/pacIcon.png");
 
-            logoImage = readRequiredImage(resourceClass, "assets/ui/logo.png");
+            logoImage = readRequiredImage(resourceClass, "/assets/ui/logo.png");
 
-            panelBackground = readRequiredImage(resourceClass, "assets/ui/Bg3.png");
-            buttonSheet = readRequiredImage(resourceClass, "assets/ui/Button_ver2.png");
+            panelBackground = readRequiredImage(resourceClass, "/assets/ui/Bg3.png");
+            buttonSheet = readRequiredImage(resourceClass, "/assets/ui/Button_ver2.png");
 
             BufferedImage[] buttons = SpriteSheet.cutGrid(buttonSheet, 32, 32, 2, 4);
             buttonStartFrames   = new BufferedImage[] { buttons[0], buttons[1] };
