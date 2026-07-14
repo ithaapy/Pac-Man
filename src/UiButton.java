@@ -3,28 +3,34 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import javax.swing.Timer;
 
 public class UiButton {
     public enum Type { IMAGE, TEXT }
 
     private final String label;
-    private final BufferedImage image;
+    private final BufferedImage[] frames;  // null = teks
     private final Rectangle bounds;
     private final Runnable action;
     private final Type type;
 
-    public UiButton(String label, Rectangle bounds, Runnable action) {
-        this.type = Type.TEXT;
-        this.label = label;
-        this.image = null;
+    private boolean pressed = false;
+    private Timer pressTimer;
+
+    // Tombol gambar animasi
+    public UiButton(BufferedImage[] frames, Rectangle bounds, Runnable action) {
+        this.type = Type.IMAGE;
+        this.label = null;
+        this.frames = frames;
         this.bounds = bounds;
         this.action = action;
     }
 
-    public UiButton(BufferedImage image, Rectangle bounds, Runnable action) {
-        this.type = Type.IMAGE;
-        this.label = null;
-        this.image = image;
+    // Tombol teks (Home)
+    public UiButton(String label, Rectangle bounds, Runnable action) {
+        this.type = Type.TEXT;
+        this.label = label;
+        this.frames = null;
         this.bounds = bounds;
         this.action = action;
     }
@@ -34,12 +40,25 @@ public class UiButton {
     }
 
     public void click() {
-        action.run();
+        if (type == Type.IMAGE && frames != null && frames.length > 1) {
+            pressed = true;
+            if (pressTimer != null) pressTimer.stop();
+            pressTimer = new Timer(200, e -> {
+                pressed = false;
+                action.run();
+                ((Timer) e.getSource()).stop();
+            });
+            pressTimer.setRepeats(false);
+            pressTimer.start();
+        } else {
+            action.run();
+        }
     }
 
     public void draw(Graphics g, Font font) {
-        if (type == Type.IMAGE && image != null) {
-            g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
+        if (type == Type.IMAGE && frames != null) {
+            BufferedImage img = pressed ? frames[1] : frames[0];
+            g.drawImage(img, bounds.x, bounds.y, bounds.width, bounds.height, null);
         } else if (type == Type.TEXT && label != null) {
             g.setFont(font);
             FontMetrics fm = g.getFontMetrics();

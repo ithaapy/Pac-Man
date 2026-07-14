@@ -16,11 +16,15 @@ public class GameImages {
     public BufferedImage panelBackground;   // Bg3.png
     public BufferedImage buttonSheet;       // button.png
 
-    // Potongan dari button.png (32×32)
-    public BufferedImage buttonStart;
-    public BufferedImage buttonPause;
-    public BufferedImage buttonRestart;
-    public BufferedImage buttonExit;
+   
+    // [0]=Start idle,  [1]=Start klik
+    // [2]=Home idle,   [3]=Home klik
+    // [4]=Restart idle,[5]=Restart klik
+    // [6]=Exit idle,   [7]=Exit klik
+    public BufferedImage[] buttonStartFrames;
+    public BufferedImage[] buttonHomeFrames;
+    public BufferedImage[] buttonRestartFrames;
+    public BufferedImage[] buttonExitFrames;
 
     public BufferedImage pacIconImage;
 
@@ -72,18 +76,13 @@ public class GameImages {
             logoImage = readRequiredImage(resourceClass, "assets/ui/logo.png");
 
             panelBackground = readRequiredImage(resourceClass, "assets/ui/Bg3.png");
-            buttonSheet = readRequiredImage(resourceClass, "assets/ui/button.png");
+            buttonSheet = readRequiredImage(resourceClass, "assets/ui/Button_ver2.png");
 
-            
-
-            BufferedImage[] buttons = SpriteSheet.cutGrid(buttonSheet, 32, 32, 2, 2);
-            // Urutan cutGrid: row-major
-            // [0]=Start, [1]=Pause, [2]=Restart, [3]=Exit
-            buttonStart   = buttons[0];
-            buttonPause   = buttons[1];
-            buttonRestart = buttons[2];
-            buttonExit    = buttons[3];
-            
+            BufferedImage[] buttons = SpriteSheet.cutGrid(buttonSheet, 32, 32, 2, 4);
+            buttonStartFrames   = new BufferedImage[] { buttons[0], buttons[1] };
+            buttonHomeFrames    = new BufferedImage[] { buttons[2], buttons[3] };
+            buttonRestartFrames = new BufferedImage[] { buttons[4], buttons[5] };
+            buttonExitFrames    = new BufferedImage[] { buttons[6], buttons[7] };
             
 
         } catch (IOException e) {

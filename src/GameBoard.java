@@ -18,10 +18,9 @@ import javax.swing.Timer;
 
 public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
-    private static final int PANEL_EDGE_BLUR_INSET = 22;
 
     private GameState state = GameState.MENU;
-    private int level = 1;
+
 
     private final List<UiButton> menuButtons = new ArrayList<>();
     private final List<UiButton> pauseButtons = new ArrayList<>();
@@ -206,7 +205,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
         g.setFont(titleFont);
         FontMetrics titleMetrics = g.getFontMetrics();
-        String title = "Level " + level;
+        String title = "Pac-Man";
         int titleWidth = titleMetrics.stringWidth(title);
         int titleX = (totalWidth - titleWidth) / 2;
         int titleY = BORDER + (HEADER_HEIGHT + titleMetrics.getAscent()) / 2 - 4;
@@ -251,7 +250,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         Rectangle panel = getCenteredPanelRect();
         int centerY = panel.y + panel.height / 2;
 
-        drawCenteredText(g, "PAUSED", centerY - 80, 30f);
+        drawCenteredText(g, "PAUSE", centerY - 55, 30f);
         drawButtons(g, pauseButtons);
     }
 
@@ -277,10 +276,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     Rectangle panel = getCenteredPanelRect();
     int centerY = panel.y + panel.height / 2;
 
-    drawCenteredText(g, "YOU WIN!", centerY - 110, 30f);
-    drawCenteredText(g, "Level " + level + " Complete!", centerY - 70, 20f);
-    drawCenteredText(g, "Score: " + score, centerY - 40, 18f);
-    drawCenteredText(g, "Continue to Level " + (level + 1) + "?", centerY - 10, 18f);
+    drawCenteredText(g, "YOU WIN!", centerY - 100, 30f);   // judul besar, sama GAME OVER
+    drawCenteredText(g, "Score: " + score, centerY - 60, 18f);
+    drawCenteredText(g, "High Score: " + highScore, centerY - 30, 18f);
     drawButtons(g, winButtons);
     }
 
@@ -299,29 +297,33 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     int gap = 16;
 
     // MENU: hanya Start
-    menuButtons.add(new UiButton(images.buttonStart,
+    menuButtons.add(new UiButton(images.buttonStartFrames,
             new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::startNewGame));
 
-    // PAUSED: Start + Restart sejajar, Home di bawah
-    int rowY = cy + 10;
-    pauseButtons.add(new UiButton(images.buttonStart,
-            new Rectangle(cx - btn - gap / 2, rowY, btn, btn), this::resumeGame));
-    pauseButtons.add(new UiButton(images.buttonRestart,
-            new Rectangle(cx + gap / 2, rowY, btn, btn), this::restartGame));
-    pauseButtons.add(new UiButton("Home",
-            new Rectangle(cx - 80, rowY + 70, 160, 32), this::goToMenu));
+    // PAUSED: Home (kiri) - Start/Resume (tengah) - Restart (kanan), sejajar 1 baris,
+    // dekat dengan text "PAUSE" (lihat drawPauseOverlay -> centerY - 55)
+    int pauseRowY = cy - 5;
+    int pauseRowLeftX = cx - (3 * btn + 2 * gap) / 2;
+    pauseButtons.add(new UiButton(images.buttonHomeFrames,
+            new Rectangle(pauseRowLeftX, pauseRowY, btn, btn), this::goToMenu));
+    pauseButtons.add(new UiButton(images.buttonStartFrames,
+            new Rectangle(pauseRowLeftX + btn + gap, pauseRowY, btn, btn), this::resumeGame));
+    pauseButtons.add(new UiButton(images.buttonRestartFrames,
+            new Rectangle(pauseRowLeftX + 2 * (btn + gap), pauseRowY, btn, btn), this::restartGame));
 
-    // GAME OVER: Restart (gambar) + Home (teks), tanpa Exit
-    gameOverButtons.add(new UiButton(images.buttonRestart,
-            new Rectangle(cx - btn / 2, cy + 10, btn, btn), this::restartGame));
-    gameOverButtons.add(new UiButton("Home",
-            new Rectangle(cx - 80, cy + 80, 160, 32), this::goToMenu));
+    // GAME OVER: Home (kiri) - Restart (kanan)
+    int gameOverRowY = cy + 10;
+    gameOverButtons.add(new UiButton(images.buttonHomeFrames,
+            new Rectangle(cx - btn - gap / 2, gameOverRowY, btn, btn), this::goToMenu));
+    gameOverButtons.add(new UiButton(images.buttonRestartFrames,
+            new Rectangle(cx + gap / 2, gameOverRowY, btn, btn), this::restartGame));
 
-    // WIN: lanjut level + Home
-    winButtons.add(new UiButton(images.buttonStart,
-new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
-    winButtons.add(new UiButton("Home",
-            new Rectangle(cx - 80, cy + 90, 160, 32), this::goToMenu));
+    // WIN: Home (kiri) - Restart (kanan)
+    int winRowY = cy + 10;
+    winButtons.add(new UiButton(images.buttonHomeFrames,
+            new Rectangle(cx - btn - gap / 2, winRowY, btn, btn), this::goToMenu));
+    winButtons.add(new UiButton(images.buttonRestartFrames,
+            new Rectangle(cx + gap / 2, winRowY, btn, btn), this::restartGame));
     }
 
     private void handleMouseClick(int x, int y) {
@@ -337,6 +339,16 @@ new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
             if (button.contains(x, y)) {
                 button.click();
                 repaint();
+
+                Timer repaintTimer = new Timer(50, e -> repaint());
+                repaintTimer.start();
+
+                Timer stopTimer = new Timer(250, e -> {
+                    repaintTimer.stop();
+                    ((Timer) e.getSource()).stop();
+                });
+                stopTimer.setRepeats(false);
+                stopTimer.start();
                 return;
             }
         }
@@ -347,8 +359,7 @@ new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
     private void startNewGame() {
         score = 0;
         lives = 3;
-        level = 1;
-        loadLevel();
+        loadGame();
         state = GameState.PLAYING;
         gameLoop.start();
         requestFocusInWindow();
@@ -358,8 +369,7 @@ new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
     private void restartGame() {
         score = 0;
         lives = 3;
-        level = 1;
-        loadLevel();
+        loadGame();
         state = GameState.PLAYING;
         gameLoop.start();
         requestFocusInWindow();
@@ -380,11 +390,8 @@ new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
         repaint();
     }
 
-    private void exitGame() {
-        System.exit(0);
-    }
 
-    private void loadLevel() {
+    private void loadGame() {
         gameMap.load();
         resetPositions();
         for (Ghost ghost : gameMap.ghosts) {
@@ -437,22 +444,14 @@ new Rectangle(cx - btn / 2, cy + 20, btn, btn), this::continueToNextLevel));
         }
         gameMap.foods.remove(foodEaten);
 
-        // Keputusan Anda: level++ lalu lanjut, TANPA layar WIN
+        // Menang jika semua makanan habis → tampilkan panel WIN
         if (gameMap.foods.isEmpty()) {
-    updateHighScoreIfNeeded();
-    state = GameState.WIN;
-    gameLoop.stop();
-}
+            updateHighScoreIfNeeded();
+            state = GameState.WIN;
+            gameLoop.stop();
+        }
     }
-    private void continueToNextLevel() {
-    level++;
-    lives = 3;          // restore nyawa penuh
-    loadLevel();
-    state = GameState.PLAYING;
-    gameLoop.start();
-    requestFocusInWindow();
-    repaint();
-    }
+    
 
     private void updateHighScoreIfNeeded() {
         if (score > highScore) {
