@@ -73,7 +73,7 @@ public class GameImages {
 
             pacIconImage = readRequiredImage(resourceClass, "/assets/item/pacIcon.png");
 
-            logoImage = readRequiredImage(resourceClass, "/assets/ui/logo.png");
+            logoImage = readRequiredImage(resourceClass, "/assets/ui/Logo.png");
 
             panelBackground = readRequiredImage(resourceClass, "/assets/ui/Bg3.png");
             buttonSheet = readRequiredImage(resourceClass, "/assets/ui/Button_ver2.png");
