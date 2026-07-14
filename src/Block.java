@@ -73,7 +73,7 @@ public class Block {
 
     // Static: dipakai buat cek tabrakan antar 2 Block mana pun (dari class manapun)
     public static boolean collision(Block a, Block b) {
-    int marginA = (a instanceof Player) ? 4 : 0; // Pac-Man hitbox 24x24 di tengah
+    int marginA = (a instanceof Player) ? 4 : 0; 
     int ax = a.x + marginA;
     int ay = a.y + marginA;
     int aw = a.width - marginA * 2;

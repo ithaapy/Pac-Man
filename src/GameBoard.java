@@ -77,16 +77,16 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
     private void draw(Graphics g) {
         // Lapis 1: seluruh panel udah keisi warna ungu lewat setBackground()
-
-        // Lapis 2: kotak gelap tempat header + maze berada
         g.setColor(BACKGROUND_COLOR);
+        // Lapis 2: kotak gelap tempat header + maze berada
+       
         g.fillRect(BORDER, BORDER, totalWidth - BORDER * 2, totalHeight - BORDER * 2);
 
         drawHeader(g);
 
         // Lapis 3: maze digambar lewat "sub-graphics" yang digeser & di-clip
         // ke area mazenya sendiri, jadi kode gambar tembok/food/dst gak perlu
-        // tau-menau soal border atau header di luar sana.
+       
         Graphics mazeGraphics = g.create(BORDER, BORDER + HEADER_HEIGHT, boardWidth, boardHeight);
         drawMaze(mazeGraphics);
         mazeGraphics.dispose();
@@ -96,7 +96,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
     private void drawFooter(Graphics g) {
     int footerTop = BORDER + HEADER_HEIGHT + boardHeight;
-    int startX = BORDER + 10;  // sejajar padding "Your Score"
+    int startX = BORDER + 10;  
     int iconY = footerTop + (FOOTER_HEIGHT - LIFE_ICON_SIZE) / 2;
 
         for (int i = 0; i < lives; i++) {
@@ -120,13 +120,13 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.WHITE);
 
-        // "Your Score" + nilainya, rata kiri
+        // "Your Score" + nilainya, sebelah kiri
         g.setFont(labelFont);
         g.drawString("Your Score", BORDER + 10, BORDER + 24);
         g.setFont(valueFont);
         g.drawString(String.valueOf(score), BORDER + 10, BORDER + 50);
 
-        // "High Score" + nilainya, rata kanan
+        // "High Score" + nilainya, sebelah kanan
         g.setFont(labelFont);
         FontMetrics labelMetrics = g.getFontMetrics();
         String highScoreLabel = "High Score";

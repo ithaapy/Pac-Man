@@ -1,7 +1,7 @@
 import java.awt.Image;
 
 /**
- * Food = titik makanan kecil, digambar pakai gambar koin (smallCoin.png)
+ * Food = titik makanan kecil, digambar pakai gambar koin (powerFood.png)
  * yang dioper dari GameMap, bukan lagi fillRect() manual.
  */
 public class Food extends Block {
