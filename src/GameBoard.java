@@ -81,9 +81,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     }
 
     private void draw(Graphics g) {
-<<<<<<< HEAD
-        // Lapis 1: seluruh panel udah keisi warna ungu lewat setBackground()
-=======
+
         switch (state) {
             case MENU -> drawMenu(g);
             case PLAYING -> drawPlaying(g);
@@ -170,7 +168,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
     // ---------- PLAYING ----------
     private void drawPlaying(Graphics g) {
->>>>>>> try-ui
         g.setColor(BACKGROUND_COLOR);
         // Lapis 2: kotak gelap tempat header + maze berada
        
@@ -178,12 +175,9 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
         drawHeader(g);
 
-<<<<<<< HEAD
         // Lapis 3: maze digambar lewat "sub-graphics" yang digeser & di-clip
         // ke area mazenya sendiri, jadi kode gambar tembok/food/dst gak perlu
        
-=======
->>>>>>> try-ui
         Graphics mazeGraphics = g.create(BORDER, BORDER + HEADER_HEIGHT, boardWidth, boardHeight);
         drawMaze(mazeGraphics);
         mazeGraphics.dispose();
@@ -191,7 +185,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         drawFooter(g);
     }
 
-<<<<<<< HEAD
     private void drawFooter(Graphics g) {
     int footerTop = BORDER + HEADER_HEIGHT + boardHeight;
     int startX = BORDER + 10;  
@@ -211,8 +204,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     
     }
 
-=======
->>>>>>> try-ui
     private void drawHeader(Graphics g) {
         Font labelFont = images.pixelFont.deriveFont(Font.PLAIN, 14f);
         Font valueFont = images.pixelFont.deriveFont(Font.PLAIN, 20f);
@@ -220,19 +211,13 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.WHITE);
 
-<<<<<<< HEAD
         // "Your Score" + nilainya, sebelah kiri
-=======
->>>>>>> try-ui
         g.setFont(labelFont);
         g.drawString("Your Score", BORDER + 10, BORDER + 24);
         g.setFont(valueFont);
         g.drawString(String.valueOf(score), BORDER + 10, BORDER + 50);
 
-<<<<<<< HEAD
         // "High Score" + nilainya, sebelah kanan
-=======
->>>>>>> try-ui
         g.setFont(labelFont);
         FontMetrics labelMetrics = g.getFontMetrics();
         String highScoreLabel = "High Score";
@@ -252,17 +237,6 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         int titleX = (totalWidth - titleWidth) / 2;
         int titleY = BORDER + (HEADER_HEIGHT + titleMetrics.getAscent()) / 2 - 4;
         g.drawString(title, titleX, titleY);
-    }
-
-    private void drawFooter(Graphics g) {
-    int footerTop = BORDER + HEADER_HEIGHT + boardHeight;
-    int startX = BORDER + 10;
-    int iconY = footerTop + (FOOTER_HEIGHT - LIFE_ICON_SIZE) / 2;
-
-    for (int i = 0; i < lives; i++) {
-        int iconX = startX + i * (LIFE_ICON_SIZE + LIFE_ICON_GAP);
-        g.drawImage(images.pacIconImage, iconX, iconY, LIFE_ICON_SIZE, LIFE_ICON_SIZE, null);
-    }
     }
 
     private void drawMaze(Graphics g) {
