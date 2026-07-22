@@ -193,7 +193,7 @@ git clone https://github.com/ithaapy/Pac-Man.git
   *Wall sprite (PNG), Power Food (PNG), and programming reference*
 - DePixel Halbfett by Ingo Zimmermann (ingoFonts)  
   https://www.ingofonts.com/  
-  *Font: DePixelHalbfett.ttf
+  Font: DePixelHalbfett.ttf
 
 
 ## Lisensi
