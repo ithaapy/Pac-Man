@@ -4,31 +4,34 @@ Tugas mata kuliah Pemrograman Berorientasi Objek (OOP)
 Pac-Man adalah game 2D yang terinspirasi dari game klasik Pac-Man. Game ini dikembangkan dengan mengimplementasikkan konsep Object-Oriented Programming (OOP). Dalam game ini, pemain harus mengumpulkan seluruh makanan di dalam labirin sambil menghindari hantu dengan jumlah nyawa yang terbatas.
 
 ## Preview
-
 <table>
   <tr>
     <td align="center">
-      <img src="src/assets/images/Main_Menu.png" width="220"><br>
+      <img src="src/assets/images/Main_Menu.png" width="300"><br>
       <b>Main Menu</b>
     </td>
+  </tr>
+  <tr>
     <td align="center">
-      <img src="src/assets/images/Gameplay.png" width="220"><br>
+      <img src="src/assets/images/Gameplay.png" width="300"><br>
       <b>Gameplay</b>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="src/assets/images/Menu_Pause.png" width="220"><br>
+      <img src="src/assets/images/Menu_Pause.png" width="300"><br>
       <b>Pause Menu</b>
     </td>
+  </tr>
+  <tr>
     <td align="center">
-      <img src="src/assets/images/Gameover.png" width="220"><br>
+      <img src="src/assets/images/Gameover.png" width="300"><br>
       <b>Game Over</b>
     </td>
   </tr>
   <tr>
-    <td colspan="2" align="center">
-      <img src="src/assets/images/Win.png" width="220"><br>
+    <td align="center">
+      <img src="src/assets/images/Win.png" width="300"><br>
       <b>Win</b>
     </td>
   </tr>
