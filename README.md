@@ -4,11 +4,11 @@ Tugas mata kuliah Pemrograman Berorientasi Objek (OOP)
 Pac-Man adalah game 2D yang terinspirasi dari game klasik Pac-Man. Game ini dikembangkan dengan mengimplementasikkan konsep Object-Oriented Programming (OOP). Dalam game ini, pemain harus mengumpulkan seluruh makanan di dalam labirin sambil menghindari hantu dengan jumlah nyawa yang terbatas.
 
 ## Preview
-![Main Menu](assets/images/Main_Menu.png)
-![Gameplay](assets/images/Gameplay.png)
-![Pause Menu](assets/images/Menu_Pause.png)
-![Game Over](assets/images/Gameover.png)
-![Win](assets/images/WIn.png)
+![Main Menu](src/assets/images/Main_Menu.png)
+![Gameplay](src/assets/images/Gameplay.png)
+![Pause Menu](src/assets/images/Menu_Pause.png)
+![Game Over](src/assets/images/Gameover.png)
+![Win](src/assets/images/Win.png)
 
 ## Fitur
 - Gerak pacman & hantu berbasis tile map
@@ -28,23 +28,23 @@ Pac-Man adalah game 2D yang terinspirasi dari game klasik Pac-Man. Game ini dike
 ```
 Pac-Man
 │
-├── assets/                 # Game assets (sprites, map, UI)
+├── assets/  Game assets (sprites, map, UI, font)
 │
 ├── src/
-│   ├── Main.java               | Entry point aplikasi yang menjalankan game dan membuka window utama game                     |
-│   ├── GameBoard.java          | Game loop, gambar layar, cek tabrakan, baca keyboard                                         |
-│   ├── GameState.java          | Mengatur perpindahan antar state permainan seperti Menu, Playing, Pause, Win, dan Game Over. |
-│   ├── GameMap.java            | Layout tile map & pembuatan objek dari map                                                   |
-│   ├── GameImages.java         | Load semua asset gambar (sprite sheet & tile)                                                |
-│   ├── Player.java             | Mengatur karakter Pacman, termasuk pergerakan, animasi, dan interaksi dengan objek lain      |
-│   ├── Ghost.java              | Mengatur perilaku musuh, termasuk pergerakan dan animasi                                     |
-│   ├── Food.java               | Makanan atau poin yang dapat dikumpulkan pemain untuk memperoleh skor                        |
-│   ├── Wall.java               | Tembok atau dinding sebagai rintangan pada labirin                                           |
-│   ├── SpriteAnimation.java    | Mengatur pergantian frame animasi pada karakter dan objek permainan                          |
-│   ├── SpriteSheet.java        | Memproses sprite sheet menjadi kumpulan frame yang digunakan untuk animasi                   |
-│   ├── UiButton.java           | Mengatur komponen tombol pada antarmuka pengguna.                                            |
-│   ├── HighScoreStorage.java   | Menyimpan dan memuat data skor tertinggi ke dalam file.                                      |
-│   └── Block.java              | Main Class yang menyimpan atribut umum objek permainan, seperti posisi dan ukuran.           |
+│   ├── Main.java               | Entry point aplikasi yang menjalankan game dan membuka window utama game.                     
+│   ├── GameBoard.java          | Game loop, gambar layar, cek tabrakan, baca keyboard.                                         
+│   ├── GameState.java          | Mengatur perpindahan antar state permainan seperti Menu, Playing, Pause, Win, dan Game Over. 
+│   ├── GameMap.java            | Layout tile map & pembuatan objek dari map.                                                  
+│   ├── GameImages.java         | Load semua asset gambar (sprite sheet & tile).                                                
+│   ├── Player.java             | Mengatur karakter Pacman, termasuk pergerakan, animasi, dan interaksi dengan objek lain.      
+│   ├── Ghost.java              | Mengatur perilaku musuh, termasuk pergerakan dan animasi.                             
+│   ├── Food.java               | Makanan atau poin yang dapat dikumpulkan pemain untuk memperoleh skor.                      
+│   ├── Wall.java               | Tembok atau dinding sebagai rintangan pada labirin.                                   
+│   ├── SpriteAnimation.java    | Mengatur pergantian frame animasi pada karakter dan objek permainan.                      
+│   ├── SpriteSheet.java        | Memproses sprite sheet menjadi kumpulan frame yang digunakan untuk animasi.                
+│   ├── UiButton.java           | Mengatur komponen tombol pada antarmuka pengguna.                                            
+│   ├── HighScoreStorage.java   | Menyimpan dan memuat data skor tertinggi ke dalam file.                                      
+│   └── Block.java              | Main Class yang menyimpan atribut umum objek permainan, seperti posisi dan ukuran.           
 │
 └── README.md
 ```
