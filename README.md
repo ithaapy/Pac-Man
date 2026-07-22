@@ -4,11 +4,35 @@ Tugas mata kuliah Pemrograman Berorientasi Objek (OOP)
 Pac-Man adalah game 2D yang terinspirasi dari game klasik Pac-Man. Game ini dikembangkan dengan mengimplementasikkan konsep Object-Oriented Programming (OOP). Dalam game ini, pemain harus mengumpulkan seluruh makanan di dalam labirin sambil menghindari hantu dengan jumlah nyawa yang terbatas.
 
 ## Preview
-![Main Menu](src/assets/images/Main_Menu.png)
-![Gameplay](src/assets/images/Gameplay.png)
-![Pause Menu](src/assets/images/Menu_Pause.png)
-![Game Over](src/assets/images/Gameover.png)
-![Win](src/assets/images/Win.png)
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="src/assets/images/Main_Menu.png" width="220"><br>
+      <b>Main Menu</b>
+    </td>
+    <td align="center">
+      <img src="src/assets/images/Gameplay.png" width="220"><br>
+      <b>Gameplay</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="src/assets/images/Menu_Pause.png" width="220"><br>
+      <b>Pause Menu</b>
+    </td>
+    <td align="center">
+      <img src="src/assets/images/Gameover.png" width="220"><br>
+      <b>Game Over</b>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="src/assets/images/Win.png" width="220"><br>
+      <b>Win</b>
+    </td>
+  </tr>
+</table>
 
 ## Fitur
 - Gerak pacman & hantu berbasis tile map
