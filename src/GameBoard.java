@@ -339,7 +339,7 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
     winButtons.add(new UiButton(images.buttonHomeFrames,
             new Rectangle(cx - btn - gap / 2, winRowY, btn, btn), this::goToMenu));
     winButtons.add(new UiButton(images.buttonRestartFrames,
-            new Rectangle(cx + gap / 2, winRowY, btn, btn), this::restartGame));
+            new Rectangle(cx + gap / 2, winRowY, btn, btn), this::continueAfterWin));
     }
 
     private void handleMouseClick(int x, int y) {
@@ -384,6 +384,20 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
 
     private void restartGame() {
         score = 0;
+        lives = 3;
+        loadGame();
+        state = GameState.PLAYING;
+        gameLoop.start();
+        requestFocusInWindow();
+        repaint();
+    }
+
+    // Dipanggil dari tombol Restart di panel WIN. Beda dari restartGame():
+    // score TIDAK direset, jadi tiap kali menang lagi, skor terus numpuk
+    // (mis. menang 1x = 1840, menang 2x = 3680, dst) sampai kalah/pulang ke menu.
+    private void continueAfterWin() {
+        score = 0;   // "Your Score" mulai dari 0 lagi tiap game baru;
+                     // total kumulatifnya sekarang disimpan di highScore.
         lives = 3;
         loadGame();
         state = GameState.PLAYING;
@@ -454,25 +468,23 @@ public class GameBoard extends JPanel implements ActionListener, KeyListener {
         for (Food food : gameMap.foods) {
             if (Block.collision(pacman, food)) {
                 foodEaten = food;
-                score += 10;
-                updateHighScoreIfNeeded();
+                score += 10;   // Cuma "Your Score" yang jalan real-time pas makan food.
+                               // High Score TIDAK disentuh di sini — dia diam selama main.
             }
         }
         gameMap.foods.remove(foodEaten);
 
-        // Menang jika semua makanan habis → tampilkan panel WIN
+        // Menang jika semua makanan habis → tampilkan panel WIN.
+        // High Score baru ditambahin DI SINI, sekali, pas menang: skor sesi
+        // yang baru aja didapat (score) ditambahkan ke total High Score yang
+        // sudah ada. Jadi menang 1x → High Score +1840, menang 2x → +1840
+        // lagi (numpuk), dst. Kalau kalah (GAME_OVER), High Score TIDAK
+        // berubah sama sekali.
         if (gameMap.foods.isEmpty()) {
-            updateHighScoreIfNeeded();
+            highScore += score;
+            HighScoreStorage.save(highScore);
             state = GameState.WIN;
             gameLoop.stop();
-        }
-    }
-    
-
-    private void updateHighScoreIfNeeded() {
-        if (score > highScore) {
-            highScore = score;
-            HighScoreStorage.save(highScore);
         }
     }
 
