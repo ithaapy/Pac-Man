@@ -196,9 +196,7 @@ git clone https://github.com/ithaapy/Pac-Man.git
   Font: DePixelHalbfett.ttf
 
 
-## Lisensi
-Proyek ini dibuat hanya untuk tujuan edukasi.
-This project was developed for educational purposes only.
+
 
 
 
